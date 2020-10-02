@@ -1,0 +1,164 @@
+##1 Job Sequencing(for max profit) - Greedy O(n^2)
+'''
+Input: Four Jobs with following 
+deadlines and profits
+JobID  Deadline  Profit
+  a      4        20   
+  b      1        10
+  c      1        40  
+  d      1        30
+Output: Following is maximum 
+profit sequence of jobs
+        c, a   
+
+
+Input:  Five Jobs with following
+deadlines and profits
+JobID   Deadline  Profit
+  a       2        100
+  b       1        19
+  c       2        27
+  d       1        25
+  e       3        15
+Output: Following is maximum 
+profit sequence of jobs
+        c, a, e
+'''
+# jobScheduling function
+def jobScheduling(arr, time):
+    
+    ans = [0]*time
+    result = [False] * time 
+    job = ['-1'] * time 
+    profit = 0
+    for i in range(len(arr)):
+        for j in range(min(time - 1, arr[i][1] - 1), -1, -1):
+            
+            # Free slot found
+            if result[j] is False:
+                result[j] = True
+                job[j] = arr[i][0]
+                profit += arr[i][2]
+                break
+    return job+[profit]        
+
+# constructing the input array/matrix
+j = ['a','b','c', 'd', 'e']
+p = [100, 19, 27, 25, 15]
+st = [2, 1, 2, 1, 3]
+
+arr = []
+for i in range(len(j)):
+    arr.append([j[i],st[i],p[i]])
+
+def take_second(elem):
+    return elem[:][2]
+
+#sorting in decreasing order of profit     
+arr1 = sorted(arr, key=take_second, reverse = True)    
+#print(arr1)
+time = 3
+print(jobScheduling(arr1, time))
+
+
+
+##2 Min No of Coins(Greedy) - O(n^2)
+
+def findMin(V): 
+    
+    deno = [1, 2, 5, 10, 20, 50,  
+            100, 500, 1000] 
+    n = len(deno)
+    
+    i = n-1
+    ans = []
+    while i>=0:
+        
+        while deno[i]<=V:
+            V = V - deno[i]
+            ans.append(deno[i])
+            
+        i-=1
+        
+    return ans
+
+V = 1194
+print(findMin(V)) 
+
+
+
+##3 Platform Needed
+
+'''
+Input: arr[] = {9:00, 9:40, 9:50, 11:00, 15:00, 18:00}
+dep[] = {9:10, 12:00, 11:20, 11:30, 19:00, 20:00}
+Output: 3
+Explantion: There are at-most three trains at a time (time between 11:00 to 11:20)
+'''
+
+
+def findPlatform(arr, dep, n):
+    # Sort arrival and
+    # departure arrays
+    arr.sort()
+    dep.sort()
+    # plat_needed indicates
+    # number of platforms
+    # needed at a time
+    plat_needed = 1
+    result = 1
+    i = 1
+    j = 0
+    while (i < n and j < n):
+        # If next event in sorted
+        # order is arrival,
+        # increment count of
+        # platforms needed
+        if (arr[i] <= dep[j]):
+            plat_needed+= 1
+            i+= 1
+        # Else decrement count
+        # of platforms needed
+        elif (arr[i] > dep[j]):
+            plat_needed-= 1
+            j+= 1
+        # Update result if needed
+        result = max(result, plat_needed)
+    return result
+
+
+# driver code
+arr = [900, 940, 950, 1100, 1500, 1800]
+dep = [910, 1200, 1120, 1130, 1900, 2000]
+n = len(arr)
+
+print(findPlatform(arr, dep, n))
+
+##4 --------------------BACKTRACKING--------------------
+##4 Print list of all permutations 
+'''
+Algorithm Paradigm: Backtracking --->
+Time Complexity: O(n*n!) Note that there are n! permutations
+and it requires O(n) time to print a a permutation.
+'''
+
+def toString(List):
+    return "".join(List)
+
+def permute(a, l, r, ans = []):
+    if l==r:
+        ans.append(toString(a))
+    else:
+        for i in range(l, r+1):
+            a[l], a[i] = a[i], a[l]
+            permute(a, l+1, r, ans)
+            a[l], a[i] = a[i], a[l] #Backtrack
+            
+    return ans
+
+string = "ABC"
+n = len(string) 
+a = list(string) 
+print(permute(a, 0, n-1)) 
+
+##5 
